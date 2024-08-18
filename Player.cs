@@ -1,10 +1,11 @@
 using Godot;
-using System;
-using System.Collections.Generic;
+
+namespace SpaceGame;
 
 public partial class Player : CharacterBody2D
 {
-	private int _speed = 400;
+	private int _acceleration = 5;
+	private Vector2 _velocity = Vector2.Zero;
 	private float _angularSpeed = Mathf.Pi;
 
 	public Player()
@@ -14,27 +15,30 @@ public partial class Player : CharacterBody2D
 
 	public override void _Process(double delta)
 	{
-		//Rotation += _angularSpeed * (float)delta;
-
-		//var velocity = Vector2.Up.Rotated(Rotation) * _speed;
-		//Position += velocity * (float)delta;
-
-		var actions = new List<(string, Vector2)> {
-			("p1_left", Vector2.Left),
-			("p1_right", Vector2.Right),
-			("p1_up", Vector2.Up),
-			("p1_down", Vector2.Down),
-		};
-
-		var direction = Vector2.Zero;
-		foreach (var (key, vector) in actions)
+		var direction = 0;
+		if (Input.IsActionPressed("p1_left"))
 		{
-			if (Input.IsActionPressed(key))
-			{
-				direction += vector;
-			}
+			direction = -1;
+		}
+		if (Input.IsActionPressed("p1_right"))
+		{
+			direction = 1;
 		}
 
-		Position += _speed * direction.Normalized() * (float)delta;
+		Rotation += _angularSpeed * direction * (float)delta;
+
+		if (Input.IsActionPressed("p1_up"))
+		{
+			_velocity += Vector2.Up.Rotated(Rotation) * _acceleration;
+		}
+		if (Input.IsActionPressed("p1_down"))
+		{
+			_velocity += Vector2.Down.Rotated(Rotation) * _acceleration / 5;
+		}
+
+		_velocity = _velocity.LimitLength(1000);
+		_velocity *= .999f;
+
+		Position += _velocity * (float)delta;
 	}
 }
