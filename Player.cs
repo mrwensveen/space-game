@@ -2,24 +2,24 @@ using Godot;
 
 namespace SpaceGame;
 
-public partial class Player : CharacterBody2D
+public partial class Player : Area2D
 {
 	private const int ACCELERATION = 5;
+	private const int MAX_VELOCITY = 2000;
 	private const float ANGULAR_SPEED = Mathf.Pi;
 
 	private Vector2 _velocity = Vector2.Zero;
 
 	[Signal]
-	public delegate void HealthDepletedEventHandler();
+	public delegate void HitEventHandler();
 
-	public Player()
+	public void Start(Vector2 position)
 	{
-		GD.Print("Hello World!");
-	}
+		GD.Print($"Start! ({position})");
 
-	public override void _Ready()
-	{
-		GD.Print("Ready!");
+		Position = position;
+		Show();
+		GetNode<CollisionPolygon2D>("CollisionPolygon2D").Disabled = false;
 	}
 
 	public override void _Process(double delta)
@@ -45,9 +45,33 @@ public partial class Player : CharacterBody2D
 			_velocity += Vector2.Down.Rotated(Rotation) * ACCELERATION / 5;
 		}
 
-		_velocity = _velocity.LimitLength(1000);
+		_velocity = _velocity.LimitLength(MAX_VELOCITY);
 		_velocity *= .9995f;
 
 		Position += _velocity * (float)delta;
+
+		var animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+		if (Input.IsActionPressed("p1_up"))
+		{
+			animatedSprite2D.Animation = "thrust";
+		}
+		else
+		{
+			animatedSprite2D.Animation = "idle";
+		}
+
+		if (!animatedSprite2D.IsPlaying())
+		{
+			animatedSprite2D.Play();
+		}
+	}
+
+	private void OnBodyEntered(Node2D body)
+	{
+		Hide(); // Player disappears after being hit.
+		EmitSignal(SignalName.Hit);
+
+		// Must be deferred as we can't change physics properties on a physics callback.
+		GetNode<CollisionPolygon2D>("CollisionPolygon2D").SetDeferred(CollisionPolygon2D.PropertyName.Disabled, true);
 	}
 }
