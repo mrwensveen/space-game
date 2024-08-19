@@ -4,13 +4,22 @@ namespace SpaceGame;
 
 public partial class Player : CharacterBody2D
 {
-	private int _acceleration = 5;
+	private const int ACCELERATION = 5;
+	private const float ANGULAR_SPEED = Mathf.Pi;
+
 	private Vector2 _velocity = Vector2.Zero;
-	private float _angularSpeed = Mathf.Pi;
+
+	[Signal]
+	public delegate void HealthDepletedEventHandler();
 
 	public Player()
 	{
 		GD.Print("Hello World!");
+	}
+
+	public override void _Ready()
+	{
+		GD.Print("Ready!");
 	}
 
 	public override void _Process(double delta)
@@ -25,19 +34,19 @@ public partial class Player : CharacterBody2D
 			direction = 1;
 		}
 
-		Rotation += _angularSpeed * direction * (float)delta;
+		Rotation += ANGULAR_SPEED * direction * (float)delta;
 
 		if (Input.IsActionPressed("p1_up"))
 		{
-			_velocity += Vector2.Up.Rotated(Rotation) * _acceleration;
+			_velocity += Vector2.Up.Rotated(Rotation) * ACCELERATION;
 		}
 		if (Input.IsActionPressed("p1_down"))
 		{
-			_velocity += Vector2.Down.Rotated(Rotation) * _acceleration / 5;
+			_velocity += Vector2.Down.Rotated(Rotation) * ACCELERATION / 5;
 		}
 
 		_velocity = _velocity.LimitLength(1000);
-		_velocity *= .999f;
+		_velocity *= .9995f;
 
 		Position += _velocity * (float)delta;
 	}
