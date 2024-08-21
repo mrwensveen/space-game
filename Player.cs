@@ -85,7 +85,9 @@ public partial class Player : Area2D
 		//Hide(); // Player disappears after being hit.
 		EmitSignal(SignalName.Hit);
 
+		_velocity *= -1;
+
 		// Must be deferred as we can't change physics properties on a physics callback.
-		GetNode<CollisionPolygon2D>("CollisionPolygon2D").SetDeferred(CollisionPolygon2D.PropertyName.Disabled, true);
+		//GetNode<CollisionPolygon2D>("CollisionPolygon2D").SetDeferred(CollisionPolygon2D.PropertyName.Disabled, true);
 	}
 }
