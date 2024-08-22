@@ -8,14 +8,13 @@
 [node name="Main" type="Node2D"]
 scale = Vector2(0.3, 0.3)
 script = ExtResource("1_b4om3")
+PlayerScene = ExtResource("1_4gn3t")
+AsteroidScene = ExtResource("2_7cgay")
 
 [node name="Background" type="TextureRect" parent="."]
-offset_right = 1920.0
-offset_bottom = 1200.0
+offset_right = 6400.0
+offset_bottom = 4000.0
 texture = ExtResource("2_bqrbc")
-
-[node name="Player" parent="." instance=ExtResource("1_4gn3t")]
-position = Vector2(500, 500)
 
 [node name="Asteroid" parent="." instance=ExtResource("2_7cgay")]
 position = Vector2(2500, 1250)

@@ -6,19 +6,35 @@ public partial class Player : Area2D
 {
 	private const float ANGULAR_SPEED = Mathf.Pi;
 
-	[Export]
-	private float _acceleration = 2;
+	[Export] private float _acceleration = 2;
 
-	[Export]
-	private float _deceleration = 1;
+	[Export] private float _deceleration = 1;
 
-	[Export]
-	private int _maxVelocity = 2000;
+	[Export] private int _maxVelocity = 2000;
 
-	private Vector2 _velocity = Vector2.Zero;
+	[Export] private bool _invincible = true;
 
-	[Signal]
-	public delegate void HitEventHandler();
+	[Signal] public delegate void DiedEventHandler(Player player);
+
+	private Vector2 _velocity;
+
+	public void Start(Vector2 position)
+	{
+		Position = position;
+		Rotation = 0;
+
+		_velocity = Vector2.Zero;
+		_invincible = true;
+
+		var invincibleTimer = GetNode<Timer>("InvincibleTimer");
+		if (invincibleTimer != null && invincibleTimer.IsInsideTree() && invincibleTimer.IsStopped())
+		{
+			invincibleTimer.Start();
+		}
+
+		Show();
+		SetProcess(true);
+	}
 
 	public override void _Process(double delta)
 	{
@@ -81,20 +97,33 @@ public partial class Player : Area2D
 
 	private void OnBodyEntered(Node2D body)
 	{
-		GD.Print("Hit!");
-
-		EmitSignal(SignalName.Hit);
+		if (_invincible) return;
 
 		var animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		animatedSprite2D.Animation = "explosion";
 
-		//GetNode<AnimatedSprite2D>("AnimatedSprite2D")
-		//	.SetDeferred(AnimatedSprite2D.PropertyName.Animation, "explosion");
-
 		// Must be deferred as we can't change physics properties on a physics callback.
-		//GetNode<CollisionPolygon2D>("CollisionPolygon2D")
-		//	.SetDeferred(CollisionPolygon2D.PropertyName.Disabled, true);
+		GetNode<CollisionPolygon2D>("CollisionPolygon2D")
+			.SetDeferred(CollisionPolygon2D.PropertyName.Disabled, true);
 
 		SetProcess(false);
+	}
+
+	private void OnInvincibleTimeout()
+	{
+		_invincible = false;
+		GetNode<CollisionPolygon2D>("CollisionPolygon2D").Disabled = false;
+	}
+
+	private void OnAnimationFinished()
+	{
+		var animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+		if (animatedSprite2D.Animation == "explosion")
+		{
+			Hide();
+			animatedSprite2D.Animation = "idle";
+
+			EmitSignal(SignalName.Died, this);
+		}
 	}
 }
