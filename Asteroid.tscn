@@ -1,6 +1,5 @@
-[gd_scene load_steps=4 format=3 uid="uid://46kwih4j0mvx"]
+[gd_scene load_steps=3 format=3 uid="uid://46kwih4j0mvx"]
 
-[ext_resource type="Script" path="res://Asteroid.cs" id="1_0yums"]
 [ext_resource type="Texture2D" uid="uid://c3yjlyk8en31h" path="res://assets/Asteroid.png" id="1_uom5w"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6t64k"]
@@ -10,9 +9,7 @@ radius = 242.745
 collision_layer = 2
 gravity_scale = 0.0
 linear_damp_mode = 1
-angular_velocity = 0.174533
 angular_damp_mode = 1
-script = ExtResource("1_0yums")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_uom5w")

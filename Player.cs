@@ -67,7 +67,6 @@ public partial class Player : Area2D
 	private void OnScreenExited()
 	{
 		var size = GetViewportRect().Size * GetGlobalTransform().Scale.Inverse();
-		GD.Print(Position, size);
 
 		if (Position.X < 0 || Position.X > size.X)
 		{
@@ -82,12 +81,20 @@ public partial class Player : Area2D
 
 	private void OnBodyEntered(Node2D body)
 	{
-		//Hide(); // Player disappears after being hit.
+		GD.Print("Hit!");
+
 		EmitSignal(SignalName.Hit);
 
-		_velocity *= -1;
+		var animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+		animatedSprite2D.Animation = "explosion";
+
+		//GetNode<AnimatedSprite2D>("AnimatedSprite2D")
+		//	.SetDeferred(AnimatedSprite2D.PropertyName.Animation, "explosion");
 
 		// Must be deferred as we can't change physics properties on a physics callback.
-		//GetNode<CollisionPolygon2D>("CollisionPolygon2D").SetDeferred(CollisionPolygon2D.PropertyName.Disabled, true);
+		//GetNode<CollisionPolygon2D>("CollisionPolygon2D")
+		//	.SetDeferred(CollisionPolygon2D.PropertyName.Disabled, true);
+
+		SetProcess(false);
 	}
 }
