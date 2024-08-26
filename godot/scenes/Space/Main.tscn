@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://dnm3cfdxi42sj"]
+
+[ext_resource type="PackedScene" uid="uid://dqq511j7xulkp" path="res://scenes/Space/Player.tscn" id="1_4gn3t"]
+[ext_resource type="Script" path="res://scenes/Space/Main.cs" id="1_b4om3"]
+[ext_resource type="PackedScene" uid="uid://46kwih4j0mvx" path="res://scenes/Space/Asteroid.tscn" id="2_7cgay"]
+[ext_resource type="Texture2D" uid="uid://1pr5lm63pcf" path="res://assets/Space/Background.png" id="2_bqrbc"]
+
+[node name="Main" type="Node2D"]
+scale = Vector2(0.3, 0.3)
+script = ExtResource("1_b4om3")
+PlayerScene = ExtResource("1_4gn3t")
+AsteroidScene = ExtResource("2_7cgay")
+
+[node name="Background" type="TextureRect" parent="."]
+offset_right = 6400.0
+offset_bottom = 4000.0
+texture = ExtResource("2_bqrbc")
+
+[node name="Asteroid" parent="." instance=ExtResource("2_7cgay")]
+position = Vector2(2500, 1250)

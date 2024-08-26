@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://bgblg0y1uq6iw"]
+
+[ext_resource type="Texture2D" uid="uid://djgl4qjd4swgq" path="res://assets/Surface/Surface_01.png" id="1_wogyu"]
+[ext_resource type="Texture2D" uid="uid://br6ybfatyonua" path="res://assets/Surface/Surface_02.png" id="1_ws4gd"]
+[ext_resource type="Script" path="res://scenes/Surface/Player.cs" id="2_t0hqf"]
+[ext_resource type="Texture2D" uid="uid://dkx53onglmnn4" path="res://assets/Surface/Human.png" id="3_y1oct"]
+
+[node name="Surface" type="Node2D"]
+
+[node name="Mountains" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.1, 0)
+repeat_size = Vector2(3800, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Mountains"]
+position = Vector2(0, 450)
+texture = ExtResource("1_ws4gd")
+
+[node name="Player" type="Node2D" parent="."]
+position = Vector2(0, 600)
+script = ExtResource("2_t0hqf")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position_smoothing_enabled = true
+position_smoothing_speed = 2.0
+
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
+texture = ExtResource("3_y1oct")
+offset = Vector2(0, 200)
+
+[node name="Meadow" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.8, 0)
+repeat_size = Vector2(3800, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Meadow"]
+position = Vector2(0, 1100)
+texture = ExtResource("1_wogyu")
