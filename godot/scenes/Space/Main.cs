@@ -20,21 +20,22 @@ public partial class Main : Node2D
 		{
 			GetTree().Quit();
 		}
+	}
 
-		if (inputEvent.IsAction("p1_fire") && !HasNode("Player1"))
-		{
-			var player = PlayerScene.Instantiate<Player>();
-			player.Name = "Player1";
-			player.Died += PlayerDied;
-			player.Start(new(5000, 3000));
+	private void OnStartTimerTimeout()
+	{
+		var player = PlayerScene.Instantiate<Player>();
+		player.Name = "Player1";
+		player.Died += PlayerDied;
+		player.Start(new(5000, 4500), 0, 2000);
 
-			AddChild(player);
-		}
+		AddChild(player);
 	}
 
 	private void PlayerDied(Player player)
 	{
 		GD.Print("PlayerDied!");
-		player.Start(new(5000, 3000));
+		// player.Start(new(5000, 4500), 0, 2000);
+		GetNode<Timer>("StartTimer").Start(1);
 	}
 }

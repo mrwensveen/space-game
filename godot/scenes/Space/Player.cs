@@ -18,12 +18,12 @@ public partial class Player : Area2D
 
 	private Vector2 _velocity;
 
-	public void Start(Vector2 position)
+	public void Start(Vector2 position, float rotation, int velocity)
 	{
 		Position = position;
-		Rotation = 0;
+		Rotation = rotation;
 
-		_velocity = Vector2.Zero;
+		_velocity = Vector2.Up.Rotated(Rotation) * velocity;
 		_invincible = true;
 
 		var invincibleTimer = GetNode<Timer>("InvincibleTimer");
