@@ -1,7 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://bscignh0t3fji"]
+[gd_scene load_steps=5 format=3 uid="uid://bscignh0t3fji"]
 
 [ext_resource type="Texture2D" uid="uid://dkx53onglmnn4" path="res://assets/Surface/Human.png" id="1_8i03w"]
 [ext_resource type="Texture2D" uid="uid://bfdrn2vyvu4cu" path="res://assets/Surface/Human_atlas.png" id="2_ew3bf"]
+
+[sub_resource type="Animation" id="Animation_3x0qk"]
+resource_name = "walk"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wbhn2"]
+_data = {
+"walk": SubResource("Animation_3x0qk")
+}
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
 
@@ -68,14 +76,16 @@ rest = Transform2D(1, 0, 0, 1, -3, 120)
 [node name="Head" type="Bone2D" parent="Skeleton2D/Torso"]
 position = Vector2(-4, -228)
 rotation = -1.23112
+scale = Vector2(1, 1)
 rest = Transform2D(0.333179, -0.942864, 0.942864, 0.333179, -4, -228)
 auto_calculate_length_and_angle = false
 length = 98.0
 bone_angle = 0.0
 
 [node name="ArmL" type="Bone2D" parent="Skeleton2D/Torso"]
-position = Vector2(32, -189)
+position = Vector2(37, -192)
 rotation = 1.15359
+scale = Vector2(0.999999, 0.999999)
 rest = Transform2D(0.40521, 0.914223, -0.914223, 0.40521, 37, -192)
 auto_calculate_length_and_angle = false
 length = 270.0
@@ -84,7 +94,6 @@ bone_angle = 0.0
 [node name="LegL" type="Bone2D" parent="Skeleton2D/Torso"]
 position = Vector2(-5, 21)
 rotation = 1.89178
-scale = Vector2(1, 1)
 rest = Transform2D(-0.315496, 0.948927, -0.948927, -0.315496, -5, 21)
 auto_calculate_length_and_angle = false
 length = 127.0
@@ -93,6 +102,7 @@ bone_angle = 0.0
 [node name="LegR" type="Bone2D" parent="Skeleton2D/Torso"]
 position = Vector2(-21, 22)
 rotation = 0.908372
+scale = Vector2(1, 1)
 rest = Transform2D(0.61503, 0.788504, -0.788504, 0.61503, -21, 22)
 auto_calculate_length_and_angle = false
 length = 127.0
@@ -101,8 +111,12 @@ bone_angle = 0.0
 [node name="ArmR" type="Bone2D" parent="Skeleton2D/Torso"]
 position = Vector2(-55, -211)
 rotation = 1.79427
-scale = Vector2(1, 1)
 rest = Transform2D(-0.221616, 0.975134, -0.975134, -0.221616, -55, -211)
 auto_calculate_length_and_angle = false
 length = 284.0
 bone_angle = 0.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_wbhn2")
+}

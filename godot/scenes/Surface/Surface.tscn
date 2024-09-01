@@ -36,3 +36,7 @@ repeat_size = Vector2(3800, 0)
 [node name="Sprite2D" type="Sprite2D" parent="Meadow"]
 position = Vector2(0, 1100)
 texture = ExtResource("1_wogyu")
+
+[node name="Audio" type="Node" parent="."]
+
+[node name="Ambience" type="AudioStreamPlayer" parent="Audio"]

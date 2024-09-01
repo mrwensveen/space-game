@@ -75,7 +75,7 @@ public partial class Player : Area2D
 		}
 		else
 		{
-			animatedSprite2D.Animation = "idle";
+			animatedSprite2D.Animation = "default";
 		}
 
 		if (!animatedSprite2D.IsPlaying())
@@ -119,15 +119,16 @@ public partial class Player : Area2D
 
 		GD.Print(new { Velocity = _velocity.Length(), Position, Rotation, angle, diff });
 
-		if (diff <= .3 && _velocity.Length() <= 100)
+		if (diff <= .3 && _velocity.Length() <= 150)
 		{
 			GD.Print("Landed");
-			animatedSprite2D.Animation = "idle";
+			animatedSprite2D.Animation = "default";
 			EmitSignal(SignalName.Landed, this);
 		}
 		else
 		{
 			GD.Print("Died");
+			GetNode<AudioStreamPlayer>("Audio/Explosion").Play();
 			animatedSprite2D.Animation = "explosion";
 		}
 	}
@@ -144,7 +145,7 @@ public partial class Player : Area2D
 		if (animatedSprite2D.Animation == "explosion")
 		{
 			Hide();
-			animatedSprite2D.Animation = "idle";
+			animatedSprite2D.Animation = "default";
 
 			EmitSignal(SignalName.Died, this);
 		}
