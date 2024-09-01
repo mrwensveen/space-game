@@ -26,16 +26,22 @@ public partial class Main : Node2D
 	{
 		var player = PlayerScene.Instantiate<Player>();
 		player.Name = "Player1";
-		player.Died += PlayerDied;
+		player.Died += OnPlayerDied;
+		player.Landed += OnPlayerLanded;
 		player.Start(new(5000, 4500), 0, 2000);
 
 		AddChild(player);
 	}
 
-	private void PlayerDied(Player player)
+	private void OnPlayerDied(Player player)
 	{
-		GD.Print("PlayerDied!");
-		// player.Start(new(5000, 4500), 0, 2000);
+		GD.Print("Player died!");
 		GetNode<Timer>("StartTimer").Start(1);
+	}
+
+	private void OnPlayerLanded(Player player)
+	{
+		GD.Print("Player landed!");
+		GetTree().ChangeSceneToFile("res://scenes/Surface/Surface.tscn");
 	}
 }

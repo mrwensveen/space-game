@@ -1,9 +1,11 @@
+using System;
 using Godot;
 
 namespace SpaceGame.Scenes.Space;
 
 public partial class Player : Area2D
 {
+	private const float HALF_PI = Mathf.Pi / 2;
 	private const float ANGULAR_SPEED = Mathf.Pi;
 
 	[Export] private float _acceleration = 2;
@@ -15,6 +17,8 @@ public partial class Player : Area2D
 	[Export] private bool _invincible = true;
 
 	[Signal] public delegate void DiedEventHandler(Player player);
+
+	[Signal] public delegate void LandedEventHandler(Player player);
 
 	private Vector2 _velocity;
 
@@ -99,14 +103,33 @@ public partial class Player : Area2D
 	{
 		if (_invincible) return;
 
-		var animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-		animatedSprite2D.Animation = "explosion";
+		// Disable collisions and stop processing
 
 		// Must be deferred as we can't change physics properties on a physics callback.
 		GetNode<CollisionPolygon2D>("CollisionPolygon2D")
 			.SetDeferred(CollisionPolygon2D.PropertyName.Disabled, true);
 
 		SetProcess(false);
+
+		// Has the player landed safely or died?
+		var animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+
+		var angle = (Position - body.Position).Angle();
+		var diff = Mathf.Abs(Mathf.Wrap(Rotation - HALF_PI - angle, -Mathf.Pi, Mathf.Pi));
+
+		GD.Print(new { Velocity = _velocity.Length(), Position, Rotation, angle, diff });
+
+		if (diff <= .3 && _velocity.Length() <= 100)
+		{
+			GD.Print("Landed");
+			animatedSprite2D.Animation = "idle";
+			EmitSignal(SignalName.Landed, this);
+		}
+		else
+		{
+			GD.Print("Died");
+			animatedSprite2D.Animation = "explosion";
+		}
 	}
 
 	private void OnInvincibleTimeout()
