@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://bgblg0y1uq6iw"]
+[gd_scene load_steps=7 format=3 uid="uid://bgblg0y1uq6iw"]
 
 [ext_resource type="Script" path="res://scenes/Surface/Surface.cs" id="1_dsijq"]
 [ext_resource type="Texture2D" uid="uid://djgl4qjd4swgq" path="res://assets/Surface/Surface_01.png" id="1_wogyu"]
 [ext_resource type="Texture2D" uid="uid://br6ybfatyonua" path="res://assets/Surface/Surface_02.png" id="1_ws4gd"]
 [ext_resource type="Script" path="res://scenes/Surface/Player.cs" id="2_t0hqf"]
 [ext_resource type="Texture2D" uid="uid://dkx53onglmnn4" path="res://assets/Surface/Human.png" id="3_y1oct"]
+[ext_resource type="PackedScene" uid="uid://bscignh0t3fji" path="res://scenes/Surface/Human.tscn" id="5_h5g8f"]
 
 [node name="Surface" type="Node2D"]
 script = ExtResource("1_dsijq")
@@ -26,8 +27,12 @@ position_smoothing_enabled = true
 position_smoothing_speed = 2.0
 
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
+visible = false
 texture = ExtResource("3_y1oct")
 offset = Vector2(0, 200)
+
+[node name="Human" parent="Player" instance=ExtResource("5_h5g8f")]
+position = Vector2(0, 200)
 
 [node name="Meadow" type="Parallax2D" parent="."]
 scroll_scale = Vector2(0.8, 0)
